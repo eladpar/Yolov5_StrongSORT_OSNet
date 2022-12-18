@@ -216,6 +216,18 @@ def run(
                             label = None if hide_labels else (f'{id} {names[c]}' if hide_conf else \
                                 (f'{id} {conf:.2f}' if hide_class else f'{id} {names[c]} {conf:.2f}'))
                             color = colors(c, True)
+                            #                         ##############################Elad########################################################################
+                            depth = dataset.get_depth()
+                            # depth = depth.cpu().copy()
+                            box = output
+                            center_x = (box[0] +box[2]) /2
+                            center_y = (box[0] +box[2]) /2
+                            # center_x_cpu = int(center_x.cpu())
+                            # center_y_cpu = int(center_y.cpu())
+                            depth_calc = depth[int(center_x)][int(center_y)]
+                            # print(f"label is {label} and center_x is {center_x} center_y is {center_y} and depth value is {depth_calc[0]}")
+                            label = label + " " + str(depth_calc)
+                            # ########################################################################################################
                             annotator.box_label(bboxes, label, color=color)
 
                             if save_trajectories and tracking_method == 'strongsort':
